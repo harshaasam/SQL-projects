@@ -25,7 +25,7 @@ FROM BANK_CHURN
 GROUP BY GEOGRAPHY 
 
 
-/* 4.Which age group (e.g., 20–30, 31–40, 41–50, etc.) has the highest churn rate?*/
+/* 4.Which age group (e.g., 20â€“30, 31â€“40, 41â€“50, etc.) has the highest churn rate?*/
 
 WITH CTE AS (
 SELECT *, CASE WHEN AGE >=10 AND AGE <=20 THEN '10-20'
