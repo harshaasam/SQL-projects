@@ -37,15 +37,15 @@ CASE WHEN NAME LIKE '%Mega%' THEN 1 ELSE 0 END 'MEGA' FROM POKEMON
 SELECT CASE WHEN SUBSTRING(NAME,0,CHARINDEX('Mega',NAME)) = '' THEN NAME ELSE SUBSTRING(NAME,0,CHARINDEX('Mega',NAME)) END 'ORIGINAL_NAME',*, 
 CASE WHEN NAME LIKE '%Mega%' THEN 1 ELSE 0 END 'MEGA' INTO POKEMON1 FROM POKEMON
 
-/*1. List all Pokémon that have the same name (ignoring form variants like "Mega") appearing multiple times in the dataset.*/
+/*1. List all PokÃ©mon that have the same name (ignoring form variants like "Mega") appearing multiple times in the dataset.*/
 SELECT ORIGINAL_NAME,COUNT(*) COUNT FROM POKEMON1 
 GROUP BY ORIGINAL_NAME
 HAVING COUNT(*)>1
 
-/*2. Which Type1 has the highest average Speed for Legendary Pokémon? */
+/*2. Which Type1 has the highest average Speed for Legendary PokÃ©mon? */
 SELECT TOP 1 ORIGINAL_NAME, AVG(SPEED) FROM POKEMON1 WHERE LEGENDARY = 1 AND TYPE_2 IS NULL GROUP BY ORIGINAL_NAME ORDER BY AVG(SPEED) DESC
 
-/*3. Find all Pokémon who are the fastest (maximum Speed) in their respective Generation.*/
+/*3. Find all PokÃ©mon who are the fastest (maximum Speed) in their respective Generation.*/
 WITH CTE AS (
 SELECT P1.GENERATION,MAX(P1.SPEED) MAX_SPEED
 FROM POKEMON1 P1 
@@ -57,16 +57,16 @@ ON C.MAX_SPEED = P.SPEED AND C.GENERATION = P.GENERATION
 
 SELECT * FROM POKEMON1 ORDER BY SPEED DESC
 
-/* 4.Identify all Pokémon where Attack > Defense and Sp_Attack < Sp_Defense (i.e., physically strong but specially weak).*/
+/* 4.Identify all PokÃ©mon where Attack > Defense and Sp_Attack < Sp_Defense (i.e., physically strong but specially weak).*/
 SELECT * FROM POKEMON1 WHERE (ATTACK>DEFENSE) AND (SP_ATTACK<SP_DEFENSE)
 
-/*5. Find all Pokémon that share the same Type1 and Type2 combination as at least one other Pokémon.*/
+/*5. Find all PokÃ©mon that share the same Type1 and Type2 combination as at least one other PokÃ©mon.*/
 WITH CTE AS (
 SELECT TYPE_1,TYPE_2 FROM POKEMON1 WHERE TYPE_2 IS NOT NULL GROUP BY TYPE_1,TYPE_2 HAVING COUNT(*) >1)
 SELECT * FROM CTE C INNER JOIN POKEMON1 P ON C.TYPE_1 = P.TYPE_1 AND C.TYPE_2 = P.TYPE_2
 
 
-/*6. For each Type1, how many Legendary and non-Legendary Pokémon exist? (Output: Type1, Count_Legendary, Count_NonLegendary) */
+/*6. For each Type1, how many Legendary and non-Legendary PokÃ©mon exist? (Output: Type1, Count_Legendary, Count_NonLegendary) */
 SELECT TYPE_1, SUM(CASE WHEN LEGENDARY =1 THEN 1 ELSE 0 END) LEGENDARY, 
 SUM(CASE WHEN LEGENDARY =0 THEN 1 ELSE 0 END) NON_LEGENDARY  
 FROM POKEMON1 
